@@ -1,6 +1,7 @@
 var tone = new Tone();
 var compress = Tone.context.createDynamicsCompressor();
-
+var reverb = new Tone.Freeverb();
+var chorus = new Tone.Chorus();
 var bpm = 120;
 var mSeq, mSeq1, mSeq2;
 var mCirc;
@@ -27,10 +28,9 @@ var loop1 = new Tone.Clock(measure/6, function(time){
 var loop2 = new Tone.Clock(measure/7, function(time){
 	mSeq2.increment(time)
 });
-var button, button1, button2, button3;
+var button, button1, button2, button3, slider;
 
 var matrix0,matrix1,matrix2;
-var volume = -10;
 
 function setup() {
 	
@@ -44,31 +44,35 @@ function setup() {
 	button1 = createButton('Play Song');
 	button2 = createButton('Load Sequence');
 	button3 = createButton('Clear Sequence');
+	//slider = createSlider(60,300, bpm);
     	 // attach button listener
 	loop0.start();
 	loop1.start();
 	loop2.start();
-
+	reverb.setPreset("glassroom");
+	chorus.setPreset("ether");
 	var ringNum0 = 6;
 	var arcNum0 = 16;
 	var synth0 = new Tone.PolySynth(ringNum0,Tone.DuoSynth);
 	synth0.setPreset("Steely");
 	synth0.setVolume(-20);
-	synth0.connect(compress);
+	synth0.connect(chorus);
 
 	var ringNum1 = 5;
 	var arcNum1 = 6;
 	var synth1 = new Tone.PolySynth(ringNum1,Tone.NoiseSynth);
 	//synth1.setPreset("ScratchAttack");
 	synth1.setVolume(-30);
-	synth1.connect(compress);
+	//synth1.connect(compress);
+	synth1.connect(reverb);
+
 
 	var ringNum2 = 4;
 	var arcNum2 = 7;
 	var synth2 = new Tone.PolySynth(ringNum2,Tone.MonoSynth);
 	synth2.setPreset("Bassy");
 	synth2.setVolume(1);
-	synth2.connect(compress);
+	synth2.connect(chorus);
 
 	mCirc = new circleInterface(4*width/5, height/2, ringNum0, arcNum0, 30, root0, synth0);
 	mCirc1 = new circleInterface(width/2, height/2, ringNum1 , arcNum1, 20, root1, synth1);
@@ -77,7 +81,8 @@ function setup() {
 	mSeq = new Sequencer(bpm, mCirc, 1/8, 16 );     
 	mSeq1 = new Sequencer(bpm, mCirc1,  1/3, 6);
 	mSeq2 = new Sequencer(bpm, mCirc2,  2/7, 7);
-
+	chorus.connect(compress);
+	reverb.connect(compress);
 	compress.threshold.value = -20;
 	compress.ratio.value = 6;
 	compress.attack.value = 0.01;
@@ -93,7 +98,7 @@ function setup() {
 	button1.position(413+x, 16);
 	button2.position(150+x, 16);
 	button3.position(280+x, 16);
-
+	//slider.position(x-50, 16);
 }
 
 
