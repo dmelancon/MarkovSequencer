@@ -1,0 +1,14 @@
+{
+  "name": "sequencer",
+  "version": "1.0.0",
+  "main": "server.js",
+  "dependencies": {
+    "express": "*",
+    "body-parser": "^1.0.2",
+    "express-hbs": "*",
+    "socket.io" : "1.*",
+    "p5": "*",
+    "tone": "*",
+    "require": "*"
+  }
+}
